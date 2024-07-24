@@ -7,6 +7,7 @@ import './index.css';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
 import NewsList from './components/NewsList/NewsList';
+import NewsDetail from './components/NewsDetail/NewsDetail';
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <NewsList />,
+      },
+      {
+        path: 'news/:id',
+        element: <NewsDetail />,
       },
     ],
   },

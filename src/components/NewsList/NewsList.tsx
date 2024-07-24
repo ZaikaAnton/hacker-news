@@ -1,18 +1,32 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 import { RootStore, AppDispatch } from '../../store/store';
 import { fetchNews } from '../../store/fetchNews';
 import { FeedItem } from '../../types/FeedItem';
 import { sortNewsByDate } from '../../utils/sortNews';
+import Button from '../Button/Button';
 
 function NewsList() {
   const dispatch = useDispatch<AppDispatch>();
   const { news, isLoading, error } = useSelector((state: RootStore) => state.news);
 
+  const handleClick = () => {
+    dispatch(fetchNews());
+    console.log('Вы перезапросили новости');
+  };
+
   useEffect(() => {
     dispatch(fetchNews());
+
+    const intervalId = setInterval(() => {
+      dispatch(fetchNews());
+      console.log('Перезапрос новостей');
+    }, 60000);
+
+    return () => clearInterval(intervalId);
   }, [dispatch]);
 
   if (isLoading) {
@@ -27,15 +41,20 @@ function NewsList() {
 
   return (
     <NewsListContainer>
+      <Button onClick={handleClick} style={{ marginBottom: '25px' }}>
+        Обновить Новости
+      </Button>
       {sortedNews.map((item: FeedItem, index: number) => (
         <NewsItem key={item.id}>
           <Number>{index + 1}</Number>
-          <Title>{item.title}</Title>
-          <Meta>
+          <StyledLink to={`/news/${item.id}`}>
+            <Title>{item.title}</Title>
+          </StyledLink>
+          <InfoAboutNew>
             <span>Points: {item.points}</span>
             <span>Author: {item.user}</span>
             <span>Date: {new Date(item.time * 1000).toLocaleDateString()}</span>
-          </Meta>
+          </InfoAboutNew>
         </NewsItem>
       ))}
     </NewsListContainer>
@@ -67,10 +86,18 @@ const Title = styled.h2`
   padding-right: 10px;
 `;
 
-const Meta = styled.div`
+const InfoAboutNew = styled.div`
   font-size: 14px;
   color: gray;
   margin-top: 5px;
   display: flex;
   gap: 10px;
+  & > span {
+    margin-right: 15px;
+  }
+`;
+
+const StyledLink = styled(Link)`
+  color: #263c3f;
+  text-decoration: none;
 `;

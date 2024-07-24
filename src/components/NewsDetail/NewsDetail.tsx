@@ -1,15 +1,17 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { RootStore, AppDispatch } from '../../store/store';
 import { fetchNewsDetail } from '../../store/fetchNewsDetail';
+import Button from '../Button/Button';
 
 function NewsDetail() {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const { newsDetail, isLoading, error } = useSelector((state: RootStore) => state.newsDetail);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (id) {
@@ -29,8 +31,13 @@ function NewsDetail() {
     return <p>No news detail available.</p>;
   }
 
+  const handleBackClick = () => {
+    navigate('/');
+  };
+
   return (
     <NewsDetailContainer>
+      <Button onClick={handleBackClick}>Вернуться к списку новостей</Button>
       <Title>{newsDetail.title}</Title>
       <InfoAboutNew>
         <span>Author: {newsDetail.user}</span>
@@ -53,7 +60,7 @@ const NewsDetailContainer = styled.div`
 
 const Title = styled.h1`
   font-size: 24px;
-  margin-bottom: 10px;
+  margin: 15px 0;
 `;
 
 const InfoAboutNew = styled.div`

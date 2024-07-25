@@ -1,9 +1,9 @@
-import { Link } from "react-router-dom";
-import { Outlet } from "react-router-dom";
-import styled from "styled-components";
+import { Link } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
+import styled from 'styled-components';
 
-import { navigationLinks } from "../../constants/navigationLinks";
-import { INavigationLink } from "../../constants/navigationLinks";
+import { navigationLinks } from '../../constants/navigationLinks';
+import { INavigationLink } from '../../constants/navigationLinks';
 
 function NavigatePanel() {
   return (
@@ -13,9 +13,7 @@ function NavigatePanel() {
         {navigationLinks.map((link: INavigationLink, index: number) => (
           <div key={link.name}>
             <LinkNavigatePanel to={link.path}>{link.name}</LinkNavigatePanel>
-            {index < navigationLinks.length - 1 && (
-              <SeparatorLink> | </SeparatorLink>
-            )}
+            {index < navigationLinks.length - 1 && <SeparatorLink> | </SeparatorLink>}
           </div>
         ))}
       </WrapperNavigatePanel>

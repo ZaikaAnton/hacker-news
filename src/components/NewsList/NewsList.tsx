@@ -8,15 +8,11 @@ import { fetchNews } from '../../store/fetchNews';
 import { FeedItem } from '../../types/FeedItem';
 import { sortNewsByDate } from '../../utils/sortNews';
 import Button from '../Button/Button';
+import LoadingErrorFetch from '../LoadingErrorFetch/LoadingErrorFetch';
 
 function NewsList() {
   const dispatch = useDispatch<AppDispatch>();
   const { news, isLoading, error } = useSelector((state: RootStore) => state.news);
-
-  const handleClick = () => {
-    dispatch(fetchNews());
-    console.log('Вы перезапросили новости');
-  };
 
   useEffect(() => {
     dispatch(fetchNews());
@@ -29,35 +25,34 @@ function NewsList() {
     return () => clearInterval(intervalId);
   }, [dispatch]);
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
-
   const sortedNews = sortNewsByDate(news);
 
+  const handleClick = () => {
+    dispatch(fetchNews());
+    console.log('Вы перезапросили новости');
+  };
+
   return (
-    <NewsListContainer>
-      <Button onClick={handleClick} style={{ marginBottom: '25px' }}>
-        Обновить Новости
-      </Button>
-      {sortedNews.map((item: FeedItem, index: number) => (
-        <NewsItem key={item.id}>
-          <Number>{index + 1}</Number>
-          <StyledLink to={`/news/${item.id}`}>
-            <Title>{item.title}</Title>
-          </StyledLink>
-          <InfoAboutNew>
-            <span>Points: {item.points}</span>
-            <span>Author: {item.user}</span>
-            <span>Date: {new Date(item.time * 1000).toLocaleDateString()}</span>
-          </InfoAboutNew>
-        </NewsItem>
-      ))}
-    </NewsListContainer>
+    <LoadingErrorFetch isLoading={isLoading} error={error}>
+      <NewsListContainer>
+        <Button onClick={handleClick} style={{ marginBottom: '25px' }}>
+          Обновить Новости
+        </Button>
+        {sortedNews.map((item: FeedItem, index: number) => (
+          <NewsItem key={item.id}>
+            <Number>{index + 1}</Number>
+            <StyledLink to={`/news/${item.id}`}>
+              <Title>{item.title}</Title>
+            </StyledLink>
+            <InfoAboutNew>
+              <span>Points: {item.points}</span>
+              <span>Author: {item.user}</span>
+              <span>Date: {new Date(item.time * 1000).toLocaleDateString()}</span>
+            </InfoAboutNew>
+          </NewsItem>
+        ))}
+      </NewsListContainer>
+    </LoadingErrorFetch>
   );
 }
 

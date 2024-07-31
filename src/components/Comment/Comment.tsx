@@ -4,10 +4,12 @@ import parse from 'html-react-parser';
 
 import { Item } from '../../types/Item';
 import Comments from '../Comments/Comments';
+import Button from '../Button/Button';
 
 interface CommentProps {
   comment: Item;
 }
+
 function Comment({ comment }: CommentProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -23,11 +25,14 @@ function Comment({ comment }: CommentProps) {
 
   return (
     <CommentContainer>
-      <CommentHeader onClick={hasChildren ? toggleExpand : undefined} $clickable={hasChildren}>
+      <CommentHeader>
         <CommentAuthor>{comment.user}</CommentAuthor>
         <CommentContent>{parse(comment.content)}</CommentContent>
+        {hasChildren && (
+          <ExpandButton onClick={toggleExpand}>{isExpanded ? 'Скрыть обсуждение' : 'Показать обсуждение'}</ExpandButton>
+        )}
       </CommentHeader>
-      {isExpanded && comment.comments.length > 0 && <Comments comments={comment.comments} />}
+      {isExpanded && hasChildren && <Comments comments={comment.comments} />}
     </CommentContainer>
   );
 }
@@ -38,8 +43,7 @@ const CommentContainer = styled.div`
   margin-bottom: 10px;
 `;
 
-const CommentHeader = styled.div<{ $clickable: boolean }>`
-  cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
+const CommentHeader = styled.div`
   margin-bottom: 5px;
 `;
 
@@ -50,4 +54,8 @@ const CommentAuthor = styled.div`
 
 const CommentContent = styled.div`
   margin-bottom: 5px;
+`;
+
+const ExpandButton = styled(Button)`
+  margin-top: 5px;
 `;

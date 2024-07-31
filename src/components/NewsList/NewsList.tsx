@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
@@ -13,17 +13,53 @@ import LoadingErrorFetch from '../LoadingErrorFetch/LoadingErrorFetch';
 function NewsList() {
   const dispatch = useDispatch<AppDispatch>();
   const { news, isLoading, error } = useSelector((state: RootStore) => state.news);
+  const scrollPositionRef = useRef<number>(0);
 
   useEffect(() => {
-    dispatch(fetchNews());
+    const savedScrollPosition = sessionStorage.getItem('scrollPosition');
+
+    dispatch(fetchNews()).then(() => {
+      if (savedScrollPosition) {
+        window.scrollTo(0, parseInt(savedScrollPosition, 10));
+      }
+    });
 
     const intervalId = setInterval(() => {
       dispatch(fetchNews());
       console.log('Перезапрос новостей');
     }, 60000);
 
-    return () => clearInterval(intervalId);
+    return () => {
+      clearInterval(intervalId);
+    };
   }, [dispatch]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      scrollPositionRef.current = window.scrollY;
+      sessionStorage.setItem('scrollPosition', scrollPositionRef.current.toString());
+    };
+
+    const handleScrollWithRAF = () => requestAnimationFrame(handleScroll);
+
+    window.addEventListener('scroll', handleScrollWithRAF);
+
+    return () => {
+      window.removeEventListener('scroll', handleScrollWithRAF);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      sessionStorage.removeItem('scrollPosition');
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   const sortedNews = sortNewsByDate(news);
 

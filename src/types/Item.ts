@@ -11,6 +11,6 @@ export interface Item {
   type: string;
   url?: string;
   domain?: string;
-  comments: Item[];
+  comments: Array<Item>;
   comments_count: number;
 }

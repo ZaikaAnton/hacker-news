@@ -24,7 +24,7 @@ const newsSlice = createSlice({
       .addCase(fetchNews.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(fetchNews.fulfilled, (state, action: PayloadAction<FeedItem[]>) => {
+      .addCase(fetchNews.fulfilled, (state, action: PayloadAction<Array<FeedItem>>) => {
         state.isLoading = false;
         state.news = action.payload;
       })

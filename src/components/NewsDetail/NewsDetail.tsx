@@ -53,9 +53,9 @@ function NewsDetail() {
             <span>Date: {new Date(newsDetail.time * 1000).toLocaleDateString()}</span>
             <span>Comments: {newsDetail.comments_count}</span>
           </InfoAboutNew>
-          <Link href={newsDetail.url} target="_blank" rel="noopener noreferrer">
+          <Ling href={newsDetail.url} target="_blank" rel="noopener noreferrer">
             Ссылка на исходник
-          </Link>
+          </Ling>
           <Content>{parse(newsDetail.content)}</Content>
           {newsDetail.comments && <Comments comments={newsDetail.comments} />}
           <Button onClick={handleRefreshFetch}>Перезапрос данных</Button>
@@ -88,7 +88,7 @@ const InfoAboutNew = styled.div`
   }
 `;
 
-const Link = styled.a`
+const Ling = styled.a`
   font-size: 16px;
   color: blue;
   text-decoration: underline;

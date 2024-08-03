@@ -176,4 +176,4 @@ Error generating stack: `+i.message+`
 `,NT=_e.p`
   font-size: 16px;
   line-height: 1.5;
-`,DT=CE([{path:"/",element:U.jsx(Ux,{}),children:[{path:"/",element:U.jsx(aR,{})},{path:"news/:id",element:U.jsx(kT,{})}]},{path:"/error",element:U.jsx(Kx,{})}]);uu.createRoot(document.getElementById("root")).render(U.jsxs(p_,{store:oR,children:[U.jsx(AE,{router:DT}),","]}));
+`,DT=CE([{path:"/",element:U.jsx(Ux,{}),children:[{path:"/hacker-news/",element:U.jsx(aR,{})},{path:"news/:id",element:U.jsx(kT,{})}]},{path:"/error",element:U.jsx(Kx,{})}]);uu.createRoot(document.getElementById("root")).render(U.jsxs(p_,{store:oR,children:[U.jsx(AE,{router:DT}),","]}));
